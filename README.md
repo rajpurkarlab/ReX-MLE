@@ -1,4 +1,4 @@
-# TrialReX-MLE
+# ReX-MLE
 
 A medical machine learning benchmark platform for evaluating automated machine learning agents on realistic healthcare tasks.
 
