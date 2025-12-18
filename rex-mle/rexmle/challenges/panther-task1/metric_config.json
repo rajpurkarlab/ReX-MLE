@@ -1,0 +1,9 @@
+{
+  "metric_directions": {
+    "dsc": "higher_better",
+    "msd": "higher_better",
+    "hd95": "lower_better",
+    "masd": "lower_better",
+    "rmse": "lower_better"
+  }
+}

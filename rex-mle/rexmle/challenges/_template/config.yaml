@@ -1,0 +1,49 @@
+# Challenge Configuration Template
+# Copy this directory and customize for your challenge
+
+id: "example-challenge"  # Unique identifier (use lowercase with hyphens)
+name: "Example Medical Imaging Challenge"  # Full challenge name
+competition_type: "classification"  # classification, segmentation, detection, regression
+
+# Grand Challenge information
+grand_challenge:
+  challenge_url: "https://grand-challenge.org/challenges/your-challenge/"
+  challenge_short_name: "your-challenge"
+
+# Zenodo dataset information
+zenodo:
+  record_id: "1234567"  # Zenodo record ID
+  requires_authentication: false  # Set to true if private dataset
+  files:  # List specific files to download (optional - downloads all if omitted)
+    - "images.zip"
+    - "annotations.csv"
+
+# Medical imaging metadata
+medical:
+  modality: "CT"  # CT, MRI, X-ray, Ultrasound, etc.
+  body_part: "Chest"  # Anatomical region
+  task_description: "Binary classification of disease presence"
+
+# Dataset configuration
+dataset:
+  # Paths relative to prepared/ directory
+  answers: "example-challenge/prepared/private/test.csv"
+  sample_submission: "example-challenge/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "auc"  # Metric name: auc, dice, accuracy, f1, etc.
+  grade_fn: "rexmle.challenges.example-challenge.grade:grade"
+
+# Data preparation
+preparer: "rexmle.challenges.example-challenge.prepare:prepare"
+
+# Challenge metadata
+difficulty: "medium"  # easy, medium, hard
+awards_medals: true
+prizes:
+  - position: 1
+    value: 10000
+
+# Description file (relative to repository root)
+description: "rexmle/challenges/example-challenge/description.md"

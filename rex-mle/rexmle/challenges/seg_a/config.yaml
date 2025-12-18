@@ -1,0 +1,46 @@
+# SEG.A. 2023 - Segmentation of the Aorta (Main Task)
+# Grand Challenge: https://multicenteraorta.grand-challenge.org/
+
+id: seg_a
+name: "SEG.A. 2023 - Segmentation of the Aortic Vessel Tree"
+description: "Automatic segmentation of the aortic vessel tree (AVT) from CTA scans across multiple institutions"
+
+competition_type: segmentation
+
+# Dataset information
+# Note: Data is hosted on Figshare, not Zenodo
+# The download is handled directly in prepare.py
+dataset_source:
+  type: "figshare"
+  article_id: "14806362"
+  download_url: "https://figshare.com/ndownloader/articles/14806362/versions/1"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "seg_a/prepared/private/test_labels.csv"
+  answers_dir: "seg_a/prepared/private"
+  sample_submission: "seg_a/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.seg_a.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.seg_a.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://multicenteraorta.grand-challenge.org/"
+  year: 2023
+  conference: "MICCAI 2023"
+  modality: "CTA"
+  anatomy: "Aorta - Aortic Vessel Tree"
+  task_type: "Binary Segmentation"
+  training_cases: 90  # From 3 institutions
+  test_cases: 30  # From 4th institution (estimated)
+  evaluation_metric: "Dice Similarity Score (DSC), Hausdorff Distance (HD)"
+  dataset_source: "figshare"
+  dataset_url: "https://figshare.com/ndownloader/articles/14806362/versions/1"
+  dataset_size_gb: 15  # Estimated
+  special_recognition: "MICCAI challenge highlights - New Analysis Method"

@@ -1,0 +1,5 @@
+{"challenge_id": "ldct-iqa", "submission_path": "./runs/20251212_115106_run-group_aide_no_docker/20251212_115107_ldct-iqa_aide/submission/submission.csv"}
+{"challenge_id": "ldct-iqa", "submission_path": "./runs/20251214_235508_run-group_rdagent_no_docker/20251214_235510_ldct-iqa_rdagent/submission/submission.csv"}
+{"challenge_id": "ldct-iqa", "submission_path": "./runs/20251215_000848_run-group_ML-Master_no_docker/20251215_000850_ldct-iqa_ml-master/o4mini/submission/submission.csv"}
+
+// python -m rexmle.cli grade-batch --submission ./example_submission.jsonl --output-dir ./metrics --suffix examples

@@ -1,0 +1,70 @@
+{
+  "base_system_prompt": null,
+  "strategies": {
+    "analyze_failures": {
+      "id": 1,
+      "name": "Analyzing and handling failure cases",
+      "criteria": "Explicitly inspects errors or bad predictions (stack traces, metrics, samples), identifies root causes, and applies code or data fixes to resolve them."
+    },
+    "state_of_the_art": {
+      "id": 2,
+      "name": "Knowing the state of the art",
+      "criteria": "References or uses medical imaging state-of-the-art architectures, benchmarks, or literature (e.g., UNet variants, SAM, swin transformers) beyond generic defaults."
+    },
+    "metric_aligned_design": {
+      "id": 3,
+      "name": "Reflecting metrics in method design",
+      "criteria": "Tailors losses/postprocessing/thresholds to the target metric (e.g., Dice/IoU/ROC), including metric-aware tuning or threshold sweeps."
+    },
+    "domain_knowledge": {
+      "id": 4,
+      "name": "Having domain knowledge",
+      "criteria": "Applies medical-imaging-specific steps (HU windowing, isotropic resampling, spacing/anisotropy handling, organ-specific priors, modality-specific preprocessing)."
+    },
+    "rapid_pipeline": {
+      "id": 5,
+      "name": "Rapid experiment iteration pipeline",
+      "criteria": "Sets up automation for rapid iteration (configs, scripts, logging, checkpoints, sweeps) rather than ad-hoc single runs."
+    },
+    "augmentation": {
+      "id": 6,
+      "name": "Optimizing the augmentation method",
+      "criteria": "Designs/ablation of augmentations, uses libraries (Albumentations/Monai), or tunes augmentation parameters for performance."
+    },
+    "expert_priors": {
+      "id": 7,
+      "name": "Incorporating domain expert priors",
+      "criteria": "Adds expert-inspired rules or priors (anatomy constraints, plausible ranges, clinical heuristics) into training or postprocessing."
+    },
+    "data_curation": {
+      "id": 8,
+      "name": "Data curation and cleaning",
+      "criteria": "Detects and fixes bad data (corrupt files, mismatched labels, header issues, class imbalance handling, filtering/repair)."
+    },
+    "postprocessing": {
+      "id": 9,
+      "name": "Postprocessing results",
+      "criteria": "Applies structured postprocessing to predictions (connected components, hole filling, morphological ops, box/score filtering, TTA fusion)."
+    },
+    "ensemble_models": {
+      "id": 10,
+      "name": "Ensembling heterogeneous models",
+      "criteria": "Combines outputs from different architectures/checkpoints into a fused prediction (voting, averaging, weighted fusion)."
+    },
+    "external_data": {
+      "id": 11,
+      "name": "Leveraging external data",
+      "criteria": "Uses additional datasets or domain-pretrained weights beyond the provided training set."
+    },
+    "ensembling_seeds_folds": {
+      "id": 12,
+      "name": "Ensembling via Seeds/Folds",
+      "criteria": "Trains multiple seeds/folds and merges them for inference (cross-validation or multi-seed ensembling)."
+    },
+    "hyperparameter_optimization": {
+      "id": 13,
+      "name": "Optimizing hyperparameters systematically",
+      "criteria": "Runs structured hyperparameter search (grid/random/bayesian/Optuna) or scripted sweeps with logged comparisons."
+    }
+  }
+}

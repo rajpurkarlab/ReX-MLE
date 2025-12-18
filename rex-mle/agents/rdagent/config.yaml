@@ -1,0 +1,23 @@
+vars:
+  # time_limit: &time_limit 3600  # 24 hours in seconds
+  # time_limit: &time_limit 43200  # 24 hours in seconds
+  time_limit: &time_limit 43200  # 24 hours in seconds
+
+defaults: &defaults
+  start: rdagent/start.sh
+  dockerfile: rdagent/Dockerfile
+  kwargs_type: argparse
+  env_vars: &env_vars
+    TIME_LIMIT_SECS: *time_limit
+
+rdagent:
+  <<: *defaults
+  kwargs:
+    # timeout: "24h"
+    timeout: "12h"
+    # Note: loop-n is intentionally not set to allow RD-Agent to use its defaults
+    # and rely on timeout instead (mimics mle-bench working script)
+  env_vars:
+    <<: *env_vars
+    # Load Azure OpenAI credentials from rdagent's .env file
+    # These will be sourced by the start script

@@ -1,0 +1,6 @@
+{
+  "metric_directions": {
+    "anterior_acc": "higher_better",
+    "posterior_acc": "higher_better"
+  }
+}

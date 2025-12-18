@@ -1,0 +1,43 @@
+# TopCoW Track 1 Task 2 - CTA 3D Bounding Box Detection
+# Grand Challenge: https://topcow24.grand-challenge.org/
+
+id: topcow-track1-task2
+name: "TopCoW Track 1 Task 2 - CTA 3D Bounding Box Detection"
+description: "3D bounding box detection of Circle of Willis region on CTA imaging"
+
+competition_type: detection
+
+# Zenodo dataset information
+zenodo:
+  record_id: "15692630"
+  files:
+    - "TopCoW2024_Data_Release.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "topcow-track1-task2/prepared/private/test_labels.csv"
+  answers_dir: "topcow-track1-task2/prepared/private"
+  sample_submission: "topcow-track1-task2/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "detection"
+  grade_fn: "rexmle.challenges.topcow-track1-task2.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.topcow-track1-task2.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://topcow24.grand-challenge.org/"
+  year: 2024
+  conference: "MICCAI 2024"
+  track: 1
+  task: 2
+  modality: "CTA"
+  anatomy: "Brain - Circle of Willis"
+  task_type: "3D Bounding Box Detection"
+  training_cases: 125
+  evaluation_metric: "IoU, Precision, Recall"
+  license: "https://opendata.swiss/en/terms-of-use"
+  dataset_size_gb: 14.4

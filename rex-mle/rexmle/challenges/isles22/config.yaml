@@ -1,0 +1,97 @@
+# ISLES'22 - Ischemic Stroke Lesion Segmentation Challenge
+
+id: isles22
+name: "ISLES'22 - Ischemic Stroke Lesion Segmentation"
+description: "Multimodal MRI Infarct Segmentation in Acute and Sub-Acute Stroke"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "7960856"
+  files:
+    - "ISLES-2022.zip"
+    - "center_ids.xlsx"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "isles22/prepared/private/test_labels.csv"
+  answers_dir: "isles22/prepared/private"
+  sample_submission: "isles22/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.isles22.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.isles22.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://isles22.grand-challenge.org/"
+  year: 2022
+  conference: "MICCAI 2022"
+  task_type: "Stroke Lesion Segmentation"
+  modality: "MRI"
+  anatomy: "Brain - Ischemic Stroke Lesions"
+  license: "CC BY 4.0"
+  dataset_size_gb: 1.7
+
+  # Dataset details
+  total_cases: 250
+  train_cases: 250  # All training data available
+  test_cases: 150   # Hidden test set
+
+  # Image modalities
+  modalities:
+    - "FLAIR (Fluid Attenuated Inversion Recovery)"
+    - "DWI (Diffusion Weighted Imaging, b=1000)"
+    - "ADC (Apparent Diffusion Coefficient)"
+
+  # Scanner information
+  scanners:
+    - "3T Philips (Achieva, Ingenia)"
+    - "3T Siemens Verio"
+    - "1.5T Siemens MAGNETOM (Avanto, Aera)"
+
+  # Data characteristics
+  data_format: "NIfTI (BIDS convention)"
+  preprocessing:
+    - "Skull-stripping for de-identification"
+    - "Native space (no prior registration)"
+
+  # Clinical context
+  clinical_focus:
+    - "Acute embolic infarct patterns"
+    - "Pre-intervention (early disease state)"
+    - "Post-intervention (sub-acute patterns)"
+    - "Multiple embolic and/or cortical infarcts"
+    - "Variable lesion size and burden"
+    - "Multi-center data"
+
+  # Evaluation metrics
+  primary_metric: "dice"
+  secondary_metrics:
+    - "hausdorff_distance"
+    - "precision"
+    - "recall"
+    - "lesion_wise_f1"
+
+  # Challenge features
+  features:
+    - "Multimodal MRI (DWI, ADC, FLAIR)"
+    - "Acute and sub-acute stroke lesions"
+    - "Multiple embolic and cortical infarcts"
+    - "Pre- and post-interventional MRI"
+    - "~3x more data than ISLES'15"
+    - "Multi-center dataset"
+    - "Continuous evaluation (ongoing)"
+
+  # Key differences from previous ISLES editions
+  innovations:
+    - "Targets both large and multiple small embolic/cortical infarcts"
+    - "Evaluates both pre- and post-interventional MRI"
+    - "Wider ischemic stroke disease spectrum"
+    - "More complex infarct patterns"
+    - "Variable anatomical locations"

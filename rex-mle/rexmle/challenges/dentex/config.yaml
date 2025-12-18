@@ -1,0 +1,69 @@
+# DENTEX Challenge - Dental Enumeration and Diagnosis on Panoramic X-rays
+# Grand Challenge: https://dentex.grand-challenge.org/dentex/
+
+id: dentex
+name: "Dental Enumeration and Diagnosis on Panoramic X-rays Challenge"
+description: "Detection and diagnosis of abnormal teeth on panoramic X-rays with dental enumeration using the FDI system"
+
+competition_type: detection
+
+# Zenodo dataset information
+zenodo:
+  record_id: "7812323"  # Zenodo record ID
+  requires_authentication: false
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "dentex/prepared/private/test_labels.csv"
+  answers_dir: "dentex/prepared/private/"
+  sample_submission: "dentex/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "detection_map"  # Mean Average Precision for object detection
+  grade_fn: "rexmle.challenges.dentex.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.dentex.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://dentex.grand-challenge.org/dentex/"
+  year: 2023
+  conference: "MICCAI 2023"
+  workshop: "DELTA Workshop"
+  organizers: "MICCAI DENTEX Challenge Organizers"
+  modality: "Panoramic X-ray"
+  anatomy: "Dental (Teeth and Jaw)"
+  task_type: "Object Detection with Enumeration and Diagnosis"
+  annotation_system: "FDI (Fédération Dentaire Internationale)"
+  training_cases: 705  # Fully labeled training images
+  validation_cases: 50  # Fully labeled validation images
+  test_cases: 250  # Hidden test set
+  diagnosis_classes:
+    - "caries"
+    - "deep caries"
+    - "periapical lesions"
+    - "impacted teeth"
+  hierarchical_annotations:
+    - level: 1
+      description: "693 X-rays with quadrant detection only"
+    - level: 2
+      description: "634 X-rays with quadrant and tooth enumeration"
+    - level: 3
+      description: "1005 X-rays fully labeled (quadrant, enumeration, diagnosis)"
+  unlabeled_pretraining: 1571  # Additional unlabeled X-rays available
+  evaluation_metric: "Mean Average Precision (mAP)"
+  dataset_size_gb: 11  # Approximate total size
+  license: "Challenge dataset"
+  awards:
+    winners:
+      - position: 1
+        team: "sjtu-seiee-426"
+      - position: 2
+        team: "Chohotech"
+      - position: 3
+        team: "sdent"
+    honorable_mentions:
+      - "Ai-Align"
+      - "huikai"

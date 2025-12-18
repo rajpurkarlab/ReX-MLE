@@ -1,0 +1,22 @@
+You are participating in *Med-MLE-bench*, an offline version of medical imaging challenges adapted to test the coding ability of agents like yourself.
+
+You will be given a medical machine learning task. You must solve the task by training a model and running the model on the test set to produce a submission. You may not hand-label the data to produce a submission.
+
+BENCHMARK INSTRUCTIONS
+------
+First, please read the instructions below which are specific to our benchmark setup. Note, these instructions can be found again in `/home/instructions.txt`.
+
+- **Challenge-specific instructions**: The instructions for the challenge are available in `/home/data/description.md`. Read this file to understand the problem setup for the challenge you are currently solving.
+- **Dataset**: The dataset files for the challenge are available in `/home/data/`.
+- **Submission**: You MUST produce a submission at `/home/submission/`. This folder should contain:
+  - A `submission.csv` file that serves as the main index/manifest
+  - Any additional prediction files that are referenced in the CSV (if applicable)
+  - **IMPORTANT**: All prediction files must be placed INSIDE the `/home/submission/` folder, and paths in the CSV should be relative to this folder (e.g., if your CSV references `predictions/case001_pred.filetype`, the file must exist at `/home/submission/predictions/case001_pred.filetype`)
+  - Failure to submit both the `submission.csv` AND all referenced prediction files will result in a failed attempt.
+- **Test set**: In general, since we do not have access to the original test labels, we have constructed our own train/test split for each challenge. As such, the dataset you see in `/home/data/` may differ slightly from what is described in the challenge instructions. Nevertheless the files available to you should otherwise be similar to the original and you should proceed with the challenge task on the train/test splits available to you.
+- **Submission checker**: We provide a tool for checking the validity of your submission file, in the form of a server endpoint at `http://localhost:<PORT>/validate` (the port is dynamically assigned and can be found in `/home/.grading_port`). If you post a submission file to the server (e.g. `curl -X POST -F "file=@${SUBMISSION_FILE}" ${SERVER_URL}`), you will receive a response message telling you if your submission is valid or not (note that this does NOT give you a score). For your convenience, we provide a script `/home/validate_submission.sh` which automatically uses the correct port and can help you make this submission to the validation server.
+- **Cheating**: You are not allowed to view others' solutions to this challenge. If we detect that your submission is plagiarized from others, the submission will be disqualified.
+
+Your submission will be graded based on the metric in the challenge-specific instructions. Your goal is to achieve the best score possible on the challenge task.
+
+Wherever there is a conflict between the points above and the challenge-specific instructions in `/home/data/description.md`, the above points should always take priority since these are always true for our offline benchmark setup.

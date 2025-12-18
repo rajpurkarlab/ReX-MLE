@@ -1,0 +1,43 @@
+# TopCoW Track 2 Task 1 - MRA Multi-class Segmentation
+# Grand Challenge: https://topcow24.grand-challenge.org/
+
+id: topcow-track2-task1
+name: "TopCoW Track 2 Task 1 - MRA Multi-class Segmentation"
+description: "Multi-class segmentation of Circle of Willis vessels on MRA imaging"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "15692630"
+  files:
+    - "TopCoW2024_Data_Release.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "topcow-track2-task1/prepared/private/test_labels.csv"
+  answers_dir: "topcow-track2-task1/prepared/private"
+  sample_submission: "topcow-track2-task1/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.topcow-track2-task1.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.topcow-track2-task1.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://topcow24.grand-challenge.org/"
+  year: 2024
+  conference: "MICCAI 2024"
+  track: 2
+  task: 1
+  modality: "MRA"
+  anatomy: "Brain - Circle of Willis"
+  task_type: "Multi-class Segmentation"
+  training_cases: 125
+  evaluation_metric: "Dice Score, Surface Dice"
+  license: "https://opendata.swiss/en/terms-of-use"
+  dataset_size_gb: 14.4

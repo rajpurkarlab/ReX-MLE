@@ -1,0 +1,6 @@
+{
+  "metric_directions": {
+    "boundary_iou": "higher_better",
+    "iou": "higher_better"
+  }
+}

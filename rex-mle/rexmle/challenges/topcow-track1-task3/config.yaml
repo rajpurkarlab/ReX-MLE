@@ -1,0 +1,43 @@
+# TopCoW Track 1 Task 3 - CTA Graph Edge Classification
+# Grand Challenge: https://topcow24.grand-challenge.org/
+
+id: topcow-track1-task3
+name: "TopCoW Track 1 Task 3 - CTA Graph Edge Classification"
+description: "Classification of topological graph edges in Circle of Willis on CTA imaging"
+
+competition_type: classification
+
+# Zenodo dataset information
+zenodo:
+  record_id: "15692630"
+  files:
+    - "TopCoW2024_Data_Release.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "topcow-track1-task3/prepared/private/test_labels.csv"
+  answers_dir: "topcow-track1-task3/prepared/private"
+  sample_submission: "topcow-track1-task3/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "classification"
+  grade_fn: "rexmle.challenges.topcow-track1-task3.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.topcow-track1-task3.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://topcow24.grand-challenge.org/"
+  year: 2024
+  conference: "MICCAI 2024"
+  track: 1
+  task: 3
+  modality: "CTA"
+  anatomy: "Brain - Circle of Willis"
+  task_type: "Graph Edge Classification"
+  training_cases: 125
+  evaluation_metric: "Accuracy, F1-score"
+  license: "https://opendata.swiss/en/terms-of-use"
+  dataset_size_gb: 14.4

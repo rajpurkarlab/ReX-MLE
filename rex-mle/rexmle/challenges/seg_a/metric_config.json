@@ -1,0 +1,8 @@
+{
+  "metric_directions": {
+    "hd_50pc": "lower_better",
+    "hd_std": "lower_better",
+    "dsc_50pc": "higher_better",
+    "dsc_std": "lower_better"
+  }
+}

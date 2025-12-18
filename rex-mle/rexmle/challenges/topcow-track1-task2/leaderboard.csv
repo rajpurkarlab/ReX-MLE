@@ -1,0 +1,9 @@
+rank,team,mean_position,boundary_iou,boundary_iou_position,iou,iou_position
+1,Organizers UZH,1.0,0.69,1.0,0.79,1.0
+2,NIC-VICOROB,2.0,0.65,2.0,0.76,2.0
+3,ARG,3.0,0.62,3.0,0.74,3.0
+4,IMR,3.0,0.62,3.0,0.74,3.0
+5,CLAIM,5.0,0.6,5.0,0.72,5.0
+6,junqiangchen,5.0,0.6,5.0,0.72,5.0
+7,tatsatra,7.0,0.48,7.0,0.63,7.0
+8,pamaad,8.0,0.16,8.0,0.34,8.0

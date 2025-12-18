@@ -1,0 +1,66 @@
+# NeurIPS 2022 Cell Segmentation Challenge Configuration
+
+id: neurips-cellseg
+name: "NeurIPS 2022 Cell Segmentation Challenge"
+description: "Weakly Supervised Cell Segmentation in Multi-modality High-Resolution Microscopy Images"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "10719375"
+  files:
+    - "Training-labeled.zip"
+    - "train-unlabeled-part1.zip"
+    - "train-unlabeled-part2.zip"
+    - "Tuning.zip"
+    - "Testing.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "neurips-cellseg/prepared/private/test_labels.csv"
+  answers_dir: "neurips-cellseg/prepared/private"
+  sample_submission: "neurips-cellseg/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "f1_score"
+  grade_fn: "rexmle.challenges.neurips-cellseg.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.neurips-cellseg.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://neurips22-cellseg.grand-challenge.org/neurips22-cellseg/"
+  year: 2022
+  conference: "NeurIPS 2022"
+  task_type: "Instance Segmentation"
+  modality: "Microscopy"
+  license: "CC-BY-NC-ND"
+  dataset_size_gb: 21.3
+
+  # Evaluation metrics
+  primary_metric: "f1_score"
+  iou_threshold: 0.5
+  f1_thresholds: [0.5, 0.6, 0.7, 0.8, 0.9]
+  remove_boundary_cells: true
+
+  # Challenge features
+  features:
+    - "Weakly supervised learning"
+    - "Multi-modality microscopy"
+    - "Whole-slide image evaluation (~10,000x10,000)"
+    - "Accuracy and efficiency metrics"
+
+  # Modalities included
+  modalities:
+    - "Brightfield"
+    - "Fluorescent"
+    - "Phase-contrast (PC)"
+    - "Differential interference contrast (DIC)"
+
+  # Computational constraints
+  constraints:
+    gpu_memory_gb: 10
+    ram_gb: 28

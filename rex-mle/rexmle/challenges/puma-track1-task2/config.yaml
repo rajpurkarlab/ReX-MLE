@@ -1,0 +1,68 @@
+# PUMA Track 1 Task 2 - Nuclei Detection (3 Classes)
+# Grand Challenge: https://puma.grand-challenge.org/
+
+id: puma-track1-task2
+name: "PUMA Track 1 Task 2 - Nuclei Detection (3 Classes)"
+description: "Nuclei detection with three classes: tumor, TILs (lymphocytes and plasma cells), and other cells in melanoma histopathology"
+
+competition_type: detection
+
+# Zenodo dataset information
+zenodo:
+  record_id: "14869398"
+  files:
+    - "01_training_dataset_tif_ROIs.zip"
+    - "01_training_dataset_geojson_nuclei.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "puma-track1-task2/prepared/private/test_labels.csv"
+  answers_dir: "puma-track1-task2/prepared/private"
+  sample_submission: "puma-track1-task2/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "f1_score"
+  grade_fn: "rexmle.challenges.puma-track1-task2.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.puma-track1-task2.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://puma.grand-challenge.org/"
+  year: 2024
+  track: 1
+  task: 2
+  modality: "H&E Histopathology"
+  anatomy: "Skin - Melanoma"
+  task_type: "Nuclei Detection"
+  nuclei_classes: ["tumor", "TILs (lymphocytes + plasma cells)", "other cells"]
+  training_cases: 204
+  evaluation_metric: "Macro F1 Score"
+  dataset_size_gb: 14.8
+
+  # Submission format details
+  submission_format:
+    description: "JSON files with nuclei polygons in 'Multiple Polygons' format"
+    file_format: "JSON"
+    csv_columns: ["case_id", "predicted_nuclei_path"]
+    json_structure:
+      polygons:
+        - name: "tumor | TILs | other"
+          path_points: "[[x1, y1], [x2, y2], ...]"
+          score: "confidence score (0-1, optional)"
+
+  # Evaluation details
+  evaluation_details:
+    matching_distance: "15 pixels (centroid distance)"
+    matching_strategy: "Best confidence score, then nearest distance"
+    matching_type: "One-to-one (each prediction and GT matched at most once)"
+    primary_metric: "Macro F1 (average F1 across 3 classes)"
+
+  # Grand Challenge submission format (for reference)
+  grand_challenge_format:
+    description: "For Grand Challenge submission, use Docker container format"
+    input: "/input/images/melanoma-whole-slide-image/<uuid>.tif"
+    output: "/output/melanoma-3-class-nuclei-segmentation.json"
+    reference: "https://puma.grand-challenge.org/submission-instructions/"

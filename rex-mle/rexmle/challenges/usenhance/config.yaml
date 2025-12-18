@@ -1,0 +1,41 @@
+# USenhance Challenge - Ultrasound Image Enhancement Challenge 2023
+# Grand Challenge: https://ultrasoundenhance2023.grand-challenge.org/ultrasoundenhance2023/
+
+id: usenhance
+name: "Ultrasound Image Enhancement Challenge 2023"
+description: "Reconstructing high-quality ultrasound images from low-quality ones"
+
+competition_type: image_enhancement
+
+# Google Drive dataset information
+google_train_set:
+  id: "1RrM8YIwAENxzONSEaVZCzDkiiPMSmDxH"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "usenhance/prepared/private/test_labels.csv"
+  answers_dir: "usenhance/prepared/private"
+  sample_submission: "usenhance/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "image_quality"
+  grade_fn: "rexmle.challenges.usenhance.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.usenhance.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://ultrasoundenhance2023.grand-challenge.org/ultrasoundenhance2023/"
+  year: 2023
+  conference: "MICCAI 2023"
+  organizers: "USenhance Workshop"
+  modality: "Ultrasound"
+  organs: ["thyroid", "carotid artery", "liver", "breast", "kidney"]
+  num_patients: 109
+  num_images: 3000
+  num_pairs: 1500
+  task: "Reconstruct high-quality ultrasound images from low-quality handheld device images"
+  evaluation_metric: "Image quality metrics (PSNR, SSIM)"
+  video_recording: "https://www.youtube.com/watch?v=MICCAI2023"

@@ -1,0 +1,7 @@
+{
+  "metric_directions": {
+    "lncc": "higher_better",
+    "ssim": "higher_better",
+    "psnr": "higher_better"
+  }
+}

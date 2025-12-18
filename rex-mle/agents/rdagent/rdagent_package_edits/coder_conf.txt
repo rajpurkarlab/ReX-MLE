@@ -1,0 +1,42 @@
+FILE: rdagent/components/coder/data_science/conf.py
+
+PATCH 1: Add env_conda_env field to DSCoderCoSTEERSettings
+LOCATION: Line 24 (in DSCoderCoSTEERSettings class)
+SEARCH FOR:
+    class Config:
+        env_prefix = "DS_Coder_CoSTEER_"
+
+    max_seconds_multiplier: int = 4
+    env_type: str = "docker"
+    # TODO: extract a function for env and conf.
+    extra_evaluator: list[str] = []
+
+REPLACE WITH:
+    class Config:
+        env_prefix = "DS_Coder_CoSTEER_"
+
+    max_seconds_multiplier: int = 4
+    env_type: str = "docker"
+    env_conda_env: str = "rexagent"  # Conda environment name for conda mode
+    # TODO: extract a function for env and conf.
+    extra_evaluator: list[str] = []
+
+---
+
+PATCH 2: Update get_ds_env() to use conf.env_conda_env
+LOCATION: Line 65 (in get_ds_env function)
+SEARCH FOR:
+    elif conf.env_type == "conda":
+        env = LocalEnv(
+            conf=(
+                CondaConf(conda_env_name=conf_type) if conf_type == "kaggle" else MLECondaConf(conda_env_name=conf_type)
+            )
+        )
+
+REPLACE WITH:
+    elif conf.env_type == "conda":
+        env = LocalEnv(
+            conf=(
+                CondaConf(conda_env_name=conf.env_conda_env) if conf_type == "kaggle" else MLECondaConf(conda_env_name=conf.env_conda_env)
+            )
+        )

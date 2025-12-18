@@ -1,0 +1,54 @@
+import os
+import subprocess
+from pathlib import Path
+
+# Check if our submission file exists
+if Path("submission.csv").exists():
+    print("Submission file found, proceeding with validation...")
+
+    # Find the validation script - it should be in the workspace root
+    # Try multiple paths in order of likelihood
+    validation_paths = [
+        Path("../../../validate_submission.sh"),  # From nested code directory
+        Path("../../validate_submission.sh"),     # From submission directory
+        Path("../validate_submission.sh"),        # From agent directory
+        Path("./validate_submission.sh"),         # Current directory
+        Path("/home/validate_submission.sh"),     # Docker path (fallback)
+        Path(os.environ.get("VALIDATION_SCRIPT", "")),  # From environment variable
+    ]
+
+    validation_script = None
+    for path in validation_paths:
+        if path and path.exists():
+            validation_script = path
+            print(f"Found validation script at: {path}")
+            break
+
+    if validation_script:
+        try:
+            # Change to directory containing submission.csv before running validation
+            submission_dir = Path.cwd()
+            result = subprocess.run(
+                ["bash", str(validation_script)],
+                capture_output=True,
+                text=True,
+                timeout=120,
+                cwd=str(submission_dir)
+            )
+
+            print(result.stdout)
+            if result.stderr:
+                print("STDERR:", result.stderr)
+
+            if result.returncode != 0:
+                raise AssertionError(f"Submission validation failed with exit code {result.returncode}")
+
+            print("Submission validation completed successfully")
+        except subprocess.TimeoutExpired:
+            raise AssertionError("Submission validation timed out")
+        except Exception as e:
+            raise AssertionError(f"Validation script error: {e}")
+    else:
+        raise AssertionError("Validation script not found in expected locations")
+else:
+    print("Error: submission.csv not found. Seems code execution failed in some step.")

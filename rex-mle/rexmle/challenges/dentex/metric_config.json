@@ -1,0 +1,20 @@
+{
+  "metric_directions": {
+    "ap_mean": "higher_better",
+    "ap50_mean": "higher_better",
+    "ap75_mean": "higher_better",
+    "ar_mean": "higher_better",
+    "ap_quadrant": "higher_better",
+    "ap50_quadrant": "higher_better",
+    "ap75_quadrant": "higher_better",
+    "ar_quadrant": "higher_better",
+    "ap_enumeration": "higher_better",
+    "ap50_enumeration": "higher_better",
+    "ap75_enumeration": "higher_better",
+    "ar_enumeration": "higher_better",
+    "ap_diagnosis": "higher_better",
+    "ap50_diagnosis": "higher_better",
+    "ap75_diagnosis": "higher_better",
+    "ar_diagnosis": "higher_better"
+  }
+}

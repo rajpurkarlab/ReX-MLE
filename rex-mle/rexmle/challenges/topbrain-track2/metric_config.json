@@ -1,0 +1,10 @@
+{
+  "metric_directions": {
+    "dice": "higher_better",
+    "cldice": "higher_better",
+    "b0_error": "lower_better",
+    "hd95": "lower_better",
+    "neighbor_error": "lower_better",
+    "f1_side_road": "higher_better"
+  }
+}

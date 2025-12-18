@@ -1,0 +1,7 @@
+rank,team,mean_position,anterior_acc,anterior_acc_position,posterior_acc,posterior_acc_position
+1,CLAIM,1.0,0.89,1.0,0.75,1.0
+2,IMR,2.0,0.86,2.0,0.69,2.0
+3,Organizers UZH,3.0,0.37,3.0,0.22,3.0
+4,junqiangchen,4.5,0.25,5.0,0.21,4.0
+5,pamaad,5.0,0.25,5.0,0.2,5.0
+6,ARG,5.0,0.26,4.0,0.19,6.0

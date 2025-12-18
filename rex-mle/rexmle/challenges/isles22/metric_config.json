@@ -1,0 +1,8 @@
+{
+  "metric_directions": {
+    "dice": "higher_better",
+    "lesion_f1": "higher_better",
+    "lesion_count_diff": "lower_better",
+    "abs_volume_diff": "lower_better"
+  }
+}

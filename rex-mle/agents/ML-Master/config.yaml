@@ -1,0 +1,82 @@
+vars:
+  step_limit: &step_limit 5000
+  time_limit: &time_limit 43200
+
+defaults: &defaults
+  start: ML-Master/start.sh
+  dockerfile: ML-Master/Dockerfile
+  kwargs_type: omegaconf
+  env_vars: &env_defaults
+    TIME_LIMIT_SECS: *time_limit
+    ML_MASTER_GPU_INDEX: "0"
+
+kwargs_common: &kwargs_common
+  agent.steps: *step_limit
+  agent.code.temp: 1.0
+  agent.feedback.temp: 1.0
+  agent.search.max_debug_depth: 20
+  agent.search.debug_prob: 1.0
+  agent.search.num_drafts: 5
+  agent.search.num_bugs: 1
+  agent.search.num_improves: 3
+  agent.search.invalid_metric_upper_bound: 100
+  agent.search.metric_improvement_threshold: 0.0001
+  agent.search.max_improve_failure: 3
+  agent.search.parallel_search_num: 3
+  exec.timeout: 43200
+  copy_data: False
+
+ml-master/o4mini:
+  <<: *defaults
+  kwargs:
+    <<: *kwargs_common
+    agent.code.model: o4-mini-0416
+    agent.feedback.model: gpt-4o-2024-08-06
+  env_vars:
+    <<: *env_defaults
+    ML_MASTER_CODE_BASE_URL: ${{ secrets.ML_MASTER_CODE_BASE_URL }}
+    ML_MASTER_CODE_API_KEY: ${{ secrets.ML_MASTER_CODE_API_KEY }}
+    ML_MASTER_FEEDBACK_BASE_URL: ${{ secrets.ML_MASTER_FEEDBACK_BASE_URL }}
+    ML_MASTER_FEEDBACK_API_KEY: ${{ secrets.ML_MASTER_FEEDBACK_API_KEY }}
+
+ml-master/gpt5:
+  <<: *defaults
+  kwargs:
+    <<: *kwargs_common
+    agent.code.model: gpt-5
+    agent.feedback.model: gpt-5
+    agent.code.temp: 1.0
+    agent.feedback.temp: 1.0
+  env_vars:
+    <<: *env_defaults
+    TIME_LIMIT_SECS: *time_limit
+    ML_MASTER_CODE_BASE_URL: ${{ secrets.ML_MASTER_GPT5_CODE_BASE_URL }}
+    ML_MASTER_CODE_API_KEY: ${{ secrets.ML_MASTER_GPT5_CODE_API_KEY }}
+    ML_MASTER_FEEDBACK_BASE_URL: ${{ secrets.ML_MASTER_GPT5_FEEDBACK_BASE_URL }}
+    ML_MASTER_FEEDBACK_API_KEY: ${{ secrets.ML_MASTER_GPT5_FEEDBACK_API_KEY }}
+
+ml-master/gemini3:
+  <<: *defaults
+  kwargs:
+    <<: *kwargs_common
+    agent.code.model: gemini-3-pro-preview
+    agent.feedback.model: gemini-3-pro-preview
+  env_vars:
+    <<: *env_defaults
+    ML_MASTER_CODE_BASE_URL: ${{ secrets.ML_MASTER_GEMINI_CODE_BASE_URL }}
+    ML_MASTER_CODE_API_KEY: ${{ secrets.ML_MASTER_GEMINI_CODE_API_KEY }}
+    ML_MASTER_FEEDBACK_BASE_URL: ${{ secrets.ML_MASTER_GEMINI_FEEDBACK_BASE_URL }}
+    ML_MASTER_FEEDBACK_API_KEY: ${{ secrets.ML_MASTER_GEMINI_FEEDBACK_API_KEY }}
+
+ml-master/claude-sonnet-4.5:
+  <<: *defaults
+  kwargs:
+    <<: *kwargs_common
+    agent.code.model: claude-sonnet-4-5-20250929
+    agent.feedback.model: claude-sonnet-4-5-20250929
+  env_vars:
+    <<: *env_defaults
+    ML_MASTER_CODE_BASE_URL: ${{ secrets.ML_MASTER_CLAUDE_CODE_BASE_URL }}
+    ML_MASTER_CODE_API_KEY: ${{ secrets.ML_MASTER_CLAUDE_CODE_API_KEY }}
+    ML_MASTER_FEEDBACK_BASE_URL: ${{ secrets.ML_MASTER_CLAUDE_FEEDBACK_BASE_URL }}
+    ML_MASTER_FEEDBACK_API_KEY: ${{ secrets.ML_MASTER_CLAUDE_FEEDBACK_API_KEY }}

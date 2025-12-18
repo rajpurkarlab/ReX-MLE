@@ -1,0 +1,41 @@
+# PANTHER Challenge - Task 1: Pancreatic Tumor Segmentation on Diagnostic MRI
+# Grand Challenge: https://panther.grand-challenge.org/
+# Leaderboard: https://panther.grand-challenge.org/evaluation/closed-testing-phase/leaderboard/
+
+id: panther-task1
+name: "PANTHER Task 1: Pancreatic Tumor Segmentation on Diagnostic MRI"
+description: "Pancreatic tumor segmentation on T1-weighted contrast-enhanced diagnostic MRI"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "15192302"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "panther-task1/prepared/private/test_labels.csv"
+  answers_dir: "panther-task1/prepared/private"
+  sample_submission: "panther-task1/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.panther-task1.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.panther-task1.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://panther.grand-challenge.org/"
+  leaderboard_url: "https://panther.grand-challenge.org/evaluation/closed-testing-phase/leaderboard/"
+  year: 2024
+  task: 1
+  task_name: "Diagnostic MRI Segmentation"
+  organizers: "Radboud University Medical Center & Odense University Hospital"
+  prize: "€500"
+  modality: "T1-weighted contrast-enhanced MRI (arterial phase)"
+  scanner: "Siemens"
+  annotated_cases: 92
+  license: "CC BY-NC-SA 4.0"

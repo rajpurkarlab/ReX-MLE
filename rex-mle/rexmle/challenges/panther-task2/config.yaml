@@ -1,0 +1,42 @@
+# PANTHER Challenge - Task 2: Pancreatic Tumor Segmentation on MR-Linac MRI
+# Grand Challenge: https://panther.grand-challenge.org/
+# Leaderboard: https://panther.grand-challenge.org/evaluation/closed-testing-phase-task-2/leaderboard/
+
+id: panther-task2
+name: "PANTHER Task 2: Pancreatic Tumor Segmentation on MR-Linac MRI"
+description: "Pancreatic tumor segmentation on T2-weighted MR-Linac MRI for adaptive radiotherapy"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "15192302"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "panther-task2/prepared/private/test_labels.csv"
+  answers_dir: "panther-task2/prepared/private"
+  sample_submission: "panther-task2/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.panther-task2.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.panther-task2.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://panther.grand-challenge.org/"
+  leaderboard_url: "https://panther.grand-challenge.org/evaluation/closed-testing-phase-task-2/leaderboard/"
+  year: 2024
+  task: 2
+  task_name: "MR-Linac Adaptive Radiotherapy"
+  organizers: "Radboud University Medical Center & Odense University Hospital"
+  prize: "€500"
+  modality: "T2-weighted MRI"
+  scanner: "Elekta Unity MR-Linac"
+  annotated_cases: 50
+  license: "CC BY-NC-SA 4.0"
+  note: "Inference time is critical for this task"

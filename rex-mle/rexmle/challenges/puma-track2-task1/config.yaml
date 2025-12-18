@@ -1,0 +1,65 @@
+# PUMA Track 2 Task 1 - Semantic Tissue Segmentation
+# Grand Challenge: https://puma.grand-challenge.org/
+
+id: puma-track2-task1
+name: "PUMA Track 2 Task 1 - Semantic Tissue Segmentation"
+description: "Semantic tissue segmentation of tumor, stroma, epithelium, blood vessel, and necrotic regions in melanoma histopathology (same as Track 1 Task 1)"
+
+competition_type: segmentation
+
+# Zenodo dataset information
+zenodo:
+  record_id: "14869398"
+  files:
+    - "01_training_dataset_tif_ROIs.zip"
+    - "01_training_dataset_geojson_tissue.zip"
+
+# Dataset paths (relative to data directory)
+dataset:
+  answers: "puma-track2-task1/prepared/private/test_labels.csv"
+  answers_dir: "puma-track2-task1/prepared/private"
+  sample_submission: "puma-track2-task1/prepared/public/sample_submission.csv"
+
+# Grading configuration
+grader:
+  name: "dice"
+  grade_fn: "rexmle.challenges.puma-track2-task1.grade:grade"
+
+# Data preparation function
+preparer: "rexmle.challenges.puma-track2-task1.prepare:prepare"
+
+# Challenge metadata
+metadata:
+  url: "https://puma.grand-challenge.org/"
+  year: 2024
+  track: 2
+  task: 1
+  modality: "H&E Histopathology"
+  anatomy: "Skin - Melanoma"
+  task_type: "Semantic Tissue Segmentation"
+  note: "Track 2 Task 1 is identical to Track 1 Task 1 (same data, same evaluation)"
+  tissue_classes: ["tumor", "stroma", "epithelium", "blood vessel", "necrosis"]
+  class_mapping:
+    tissue_white_background: 0
+    tissue_stroma: 1
+    tissue_blood_vessel: 2
+    tissue_tumor: 3
+    tissue_epidermis: 4
+    tissue_necrosis: 5
+  training_cases: 204
+  evaluation_metric: "Micro Dice Score"
+  dataset_size_gb: 14.8
+
+  # Submission format details
+  submission_format:
+    description: "Multi-class segmentation masks (TIF or PNG)"
+    file_format: "TIF or PNG (1024x1024)"
+    pixel_values: "0=background, 1=stroma, 2=blood_vessel, 3=tumor, 4=epidermis, 5=necrosis"
+    csv_columns: ["case_id", "predicted_mask_path"]
+
+  # Grand Challenge submission format (for reference)
+  grand_challenge_format:
+    description: "For Grand Challenge submission, use Docker container format"
+    input: "/input/images/melanoma-whole-slide-image/<uuid>.tif"
+    output: "/output/images/melanoma-tissue-mask-segmentation/<uuid>.tif"
+    reference: "https://puma.grand-challenge.org/submission-instructions/"

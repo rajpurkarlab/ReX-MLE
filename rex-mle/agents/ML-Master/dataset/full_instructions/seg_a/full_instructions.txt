@@ -1,0 +1,275 @@
+You are participating in *Med-MLE-bench*, an offline version of Kaggle or Grand Challenge competitions adapted to test the coding ability of agents like yourself.
+
+You will be given a machine learning task. You must solve the task by training a model and running the model on the test set to produce a submission file. You may not hand-label the data to produce a submission file.
+
+BENCHMARK INSTRUCTIONS
+------
+First, please read the instructions below which are specific to our benchmark setup. Note, these instructions can be found again in `instructions.txt`.
+
+- **Competition-specific instructions**: The instructions for the competition are available in `input/description.md`. Read this file to understand the problem setup for the competition you are currently solving.
+- **Dataset**: The dataset files for the competition are available in `input/`.
+- **Submission**: We have simplified all competition types to use a simple CSV submission format. Regardless of what the competition instructions say, you MUST produce a submission file at `submission/submission.csv`. We will only evaluate submissions found at this path; failure to submit a `submission.csv` at this path will result in a failed attempt.
+- **Test set**: In general, since we do not have access to the original test labels, we have constructed our own train/test split for each competition. As such, the dataset you see in `input/` may differ slightly from what is described in the competition instructions. Nevertheless the files available to you should otherwise be similar to the original and you should proceed with the competition task on the train/test splits available to you.
+- **Submission checker**: We provide a tool for checking the validity of your submission file, in the form of a server endpoint at `http://localhost:5001/validate`. If you post a submission file to the server (e.g. `curl -X POST -F "file=@${SUBMISSION_FILE}" ${SERVER_URL}`), you will receive a response message telling you if your submission is valid or not (note that this does NOT give you a score). For your convenience, we provide a script `validate_submission.sh` which can help you make this submission to the validation server.
+- **Cheating**: You are not allowed to view others' solutions to this competition. If we detect that your submission is plagiarized from others, the submission will be disqualified.
+
+Your submission will be graded based on the metric in the competition-specific instructions. Your goal is to achieve the best score possible on the competition task.
+
+Wherever there is a conflict between the points above and the competition-specific instructions in `input/description.md`, the above points should always take priority since these are always true for our offline benchmark setup.
+
+ADDITIONAL NOTES
+------
+
+- **Compute**: You have access to 1 NVIDIA A100-SXM4-80GB with the appropriate drivers installed.
+- **Total Runtime**: You have a maximum of 24hours 0mins 0secs hours to attempt this task. You may iteratively develop your solution within this time frame, but bear in mind that program runtime also counts towards this limit.
+- **Total Steps**: You have a maximum of 500 steps to submit your solution.
+- You will be informed of the remaining time and steps at each step.
+- **Use as much of the available time as possible to refine and optimize your submission**: Your goal is to achieve the best possible score, not just to submit your first working solution. Consider strategies like validating your answer using the "Validate Submission" tool at the http://localhost:5000/validate endpoint, manually spot-checking predictions, building custom validation sets and grading functions, and comparing different algorithms. You may keep working until the time limit expires -- as long as your best submission is stored at the designated location at the end of your run, it will be picked up for grading.
+
+COMPETITION INSTRUCTIONS
+------
+
+# SEG.A. 2023 - Segmentation of the Aorta
+
+## Overview
+
+The SEG.A. (Segmentation of the Aorta) 2023 challenge focuses on automatic segmentation of the complete aortic vessel tree (AVT) from CTA scans. This MICCAI 2023 challenge received special mention in the challenge highlights for "New Analysis Method."
+
+**Challenge Goals:**
+- Develop robust algorithms for automatic AVT segmentation
+- Ensure cross-institutional generalization (different scanners, protocols, contrast agents)
+- Minimize manual annotation burden (manual segmentation takes up to 1 day per case)
+- Enable clinical applications: disease monitoring, blood flow simulation, surgical planning
+
+The challenge uses a novel evaluation methodology combining traditional segmentation metrics (Dice, Hausdorff Distance) with Sobol' sensitivity analysis to assess algorithm robustness across image variations.
+
+## Dataset
+
+### Images
+
+- **Modality**: CTA (Computed Tomography Angiography)
+- **Body Part**: Aortic Vessel Tree (complete aorta and branch arteries)
+- **Format**: NRRD (.nrrd)
+- **Institutions**: 3 training institutions (Dongyang, KiTS, Rider) + 1 hidden test institution
+- **Total Cases**: 56 CTA scans
+- **Training Set**: ~45 cases (80%) with images and labels
+- **Test Set**: ~11 cases (20%) from 4th institution (labels hidden)
+
+**Anatomical Coverage:**
+- Ascending aorta
+- Aortic arch
+- Descending aorta
+- Abdominal aorta
+- Branch arteries
+- Iliac arteries
+
+**Clinical Variability:**
+- Mostly healthy aortas
+- 1 case with abdominal aortic aneurysm (AAA)
+- 5 cases with aortic dissections (ADs)
+- Multiple scanning protocols
+- Different radiation doses
+- Various contrast agents
+
+### Labels
+
+Binary segmentation masks of the aortic vessel tree:
+- **Task Type**: Binary Segmentation
+- **Classes**:
+  - 0: Background
+  - 1: Aortic vessel tree (AVT)
+- **Format**: NRRD (.seg.nrrd)
+- **Annotation**: Manual slice-by-slice segmentation by experts
+
+### Data Structure
+
+```
+train/
+├── images/
+│   ├── D10.nrrd
+│   ├── D11.nrrd
+│   ├── K13.nrrd
+│   ├── K19.nrrd
+│   ├── R11.nrrd
+│   ├── R17.nrrd
+│   └── ...
+└── labels/
+    ├── D10.seg.nrrd
+    ├── D11.seg.nrrd
+    ├── K13.seg.nrrd
+    ├── K19.seg.nrrd
+    ├── R11.seg.nrrd
+    ├── R17.seg.nrrd
+    └── ...
+
+test/
+└── images/
+    ├── D12.nrrd
+    ├── K17.nrrd
+    ├── R4.nrrd
+    └── ...
+```
+
+**File Naming Convention:**
+- Images: `{CaseID}.nrrd` where CaseID has institution prefix
+  - `D*` = Dongyang institution (e.g., `D1.nrrd`, `D10.nrrd`)
+  - `K*` = KiTS institution (e.g., `K13.nrrd`, `K19.nrrd`)
+  - `R*` = Rider institution (e.g., `R11.nrrd`, `R17.nrrd`)
+- Segmentation masks: `{CaseID}.seg.nrrd` (e.g., `D1.seg.nrrd`, `K13.seg.nrrd`)
+
+## Evaluation
+
+### Primary Metrics
+
+**1. Dice Similarity Coefficient (DSC)**
+- Measures overlap between predicted and ground truth segmentation
+- Formula: DSC = 2|A ∩ B| / (|A| + |B|)
+- Range: 0 to 1 (higher is better, target: close to 1)
+
+**2. Hausdorff Distance (HD)**
+- Measures maximum surface distance between predictions and ground truth
+- Computed in physical units (mm) using voxel spacing
+- Range: 0 to ∞ (lower is better, target: close to 0)
+
+### Advanced Ranking System
+
+The full SEG.A. challenge employs a sophisticated ranking using Sobol' sensitivity analysis with image variations:
+
+**Image Variations Applied:**
+1. **Rotation**: Normal(μ=0°, σ=5°) - simulates patient positioning
+2. **Translation**: Uniform(0-2mm) - simulates patient motion
+3. **Intensity**: Contrast variations via γ=exp(β), β~N(0,0.05)
+4. **Noise**: Gaussian noise, σ~Uniform(0,0.03)
+5. **Blur**: Image filtering operations
+
+**Ranking Components:**
+
+**p1 - Uniformity of Sensitivity (Sobol' indices):**
+```
+p1 = 1 - Σ|Si^(1) - 1/M|
+```
+Measures whether all image variations equally affect the algorithm (closer to 1 is better)
+
+**p2 - Interaction Between Variations:**
+```
+p2 = Σ(Si^(T) - Si^(1))
+```
+Measures unwanted interactions between variations (closer to 0 is better)
+
+**p3 - HD Distribution Quality:**
+```
+p3 = 0.6 × r_medianHD + 0.25 × r_varHD + 0.15 × r_skewHD
+```
+- Lower median → better accuracy
+- Lower variance → more consistent
+- Positive skewness → most values are low
+
+**p4 - DSC Distribution Quality:**
+```
+p4 = 0.6 × r_medianDSC + 0.25 × r_varDSC + 0.15 × r_skewDSC
+```
+- Higher median (closer to 1) → better accuracy
+- Lower variance → more consistent
+- Negative skewness → most values are high
+
+**Final Ranking:**
+```
+r_fin = (r1 + r2)/6 + (r3 + r4)/3
+```
+Tie-breaking: Lowest execution time ranks higher
+
+### Submission Format
+
+Your submission should include:
+
+1. **submission.csv** with columns:
+
+```csv
+image_id,predicted_mask_path
+D12,predictions/D12.seg.nrrd
+K17,predictions/K17.seg.nrrd
+R4,predictions/R4.seg.nrrd
+...
+```
+
+- `image_id`: Case identifier using shortened names (e.g., `D12`, `K17`, `R4`)
+- `predicted_mask_path`: Relative path to segmentation mask file
+
+2. **predictions/** directory with segmentation masks:
+   - Binary masks: 0 (background), 1 (aortic vessel tree)
+   - Format: NRRD (.seg.nrrd)
+   - Same dimensions and spacing as input images
+   - Artifact-free for clinical use
+
+**Example Structure:**
+```
+submission/
+├── submission.csv
+└── predictions/
+    ├── D12.seg.nrrd
+    ├── K17.seg.nrrd
+    ├── R4.seg.nrrd
+    └── ...
+```
+
+## Rules
+
+1. Training data from 3 institutions provided
+2. Test on hidden 4th institution (cross-institutional evaluation)
+3. Publicly available pre-trained models allowed
+4. No additional labeled AVT segmentation data
+5. Reproducible methods preferred
+
+## Clinical Significance
+
+**Why AVT Segmentation Matters:**
+- **Disease Monitoring**: Detect aortic dissections, aneurysms, stenosis
+- **Surgical Planning**: Plan endovascular procedures
+- **Hemodynamic Analysis**: Computational fluid dynamics simulations
+- **Follow-up Care**: Compare temporal changes in vessel geometry
+
+**Manual vs. Automated:**
+- Manual: Up to 1 full day per case
+- Automated: Real-time or background processing
+- Impact: Enables routine clinical screening
+
+## Citation
+
+If you use this dataset, please cite:
+
+```bibtex
+@article{radl2022avt,
+  title={AVT: Multicenter aortic vessel tree CTA dataset collection with ground truth segmentation masks},
+  author={Radl, Lukas and Jin, Yuan and Pepe, Antonio and Li, Jianning and Gsaxner, Christina and Zhao, Fen-hua and Egger, Jan},
+  journal={Data in Brief},
+  volume={40},
+  pages={107801},
+  year={2022},
+  doi={10.1016/j.dib.2022.107801}
+}
+```
+
+## Data Source
+
+- **Grand Challenge**: https://multicenteraorta.grand-challenge.org/
+- **Figshare**: https://figshare.com/articles/dataset/14806362
+- **License**: Creative Commons BY 4.0
+- **Proceedings**: Lecture Notes in Computer Science (LNCS) series
+
+## Additional Resources
+
+### Related Papers
+
+1. Jin, Yuan, et al. "AI-based aortic vessel tree segmentation for cardiovascular diseases treatment: status quo." arXiv:2108.02998 (2021)
+2. Pepe, Antonio, et al. "Detection, segmentation, simulation and visualization of aortic dissections: A review." Medical Image Analysis 65 (2020): 101773
+
+### Sensitivity Analysis Tools
+
+- **UQTab**: https://uqtab.com - Online sensitivity analysis tool
+- **pygpc**: Python library for Polynomial Chaos Expansion and Sobol' indices
+
+### Organization
+
+- **Organized by**: TU Graz, Institute of AI in Medicine
+- **Supported by**: TU Graz LEAD Project - BiomecAorta
+- **Sponsored by**: 1000shapes

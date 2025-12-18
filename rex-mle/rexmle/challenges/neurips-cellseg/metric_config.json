@@ -1,0 +1,9 @@
+{
+  "metric_directions": {
+    "f1_0.5": "higher_better",
+    "f1_0.6": "higher_better",
+    "f1_0.7": "higher_better",
+    "f1_0.8": "higher_better",
+    "f1_0.9": "higher_better"
+  }
+}

@@ -1,0 +1,1 @@
+If you are using Azure for OpenAI, you must replace OpenAI backend using backend_openai.txt within the aide conda package.

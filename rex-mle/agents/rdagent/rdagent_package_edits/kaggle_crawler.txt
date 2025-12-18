@@ -1,0 +1,101 @@
+FILE: rdagent/scenarios/kaggle/kaggle_crawler.py
+
+PATCH: download_data() function - Add no-docker mode support
+LOCATION: Line 110 (in download_data function)
+SEARCH FOR:
+def download_data(competition: str, settings: ExtendedBaseSettings, enable_create_debug_data: bool = True) -> None:
+    local_path = settings.local_data_path
+    if settings.if_using_mle_data:
+        zipfile_path = f"{local_path}/zip_files"
+        zip_competition_path = Path(zipfile_path) / competition
+        competition_local_path = Path(local_path) / competition
+
+        if not zip_competition_path.exists():
+            mleb_env = MLEBDockerEnv()
+            mleb_env.prepare()
+            (Path(zipfile_path)).mkdir(parents=True, exist_ok=True)
+            mleb_env.check_output(
+                f"mlebench prepare -c {competition} --data-dir ./zip_files",
+                local_path=local_path,
+                running_extra_volume={str(Path("~/.kaggle").expanduser().absolute()): "/root/.kaggle"},
+            )
+
+        if not competition_local_path.exists() or list(competition_local_path.iterdir()) == []:
+            competition_local_path.mkdir(parents=True, exist_ok=True)
+
+            mleb_env = MLEBDockerEnv()
+            mleb_env.prepare()
+            mleb_env.check_output(
+                f"cp -r ./zip_files/{competition}/prepared/public/* ./{competition}", local_path=local_path
+            )
+
+---
+
+PATCH: crawl_descriptions() function - Add grade.py to competition description
+LOCATION: Line 38-40 (in crawl_descriptions function)
+SEARCH FOR:
+    if (fp := Path(f"{local_data_path}/{competition}/description.md")).exists() and not force:
+        logger.info(f"Found {competition}/description.md, loading from it.")
+        return fp.read_text()
+
+REPLACE WITH:
+    if (fp := Path(f"{local_data_path}/{competition}/description.md")).exists() and not force:
+        logger.info(f"Found {competition}/description.md, loading from it.")
+        description = fp.read_text()
+
+        # Append grade.py if it exists in the same directory
+        grade_py_path = Path(f"{local_data_path}/{competition}/grade.py")
+        logger.info(f"Looking for grade.py at: {grade_py_path} (exists: {grade_py_path.exists()})")
+        if grade_py_path.exists():
+            logger.info(f"Found {competition}/grade.py, appending to description.")
+            description += "\n\n## GRADING SCRIPT\n\n```python\n"
+            description += grade_py_path.read_text()
+            description += "\n```\n"
+        else:
+            logger.warning(f"grade.py not found at {grade_py_path}")
+
+        return description
+
+REPLACE WITH:
+def download_data(competition: str, settings: ExtendedBaseSettings, enable_create_debug_data: bool = True) -> None:
+    import os
+    local_path = settings.local_data_path
+    if settings.if_using_mle_data:
+        # Check if running in conda/local mode
+        is_no_docker = os.getenv('DS_Coder_CoSTEER_ENV_TYPE') in ['conda', 'local'] or \
+                      os.getenv('DS_Runner_CoSTEER_ENV_TYPE') in ['conda', 'local']
+
+        zipfile_path = f"{local_path}/zip_files"
+        zip_competition_path = Path(zipfile_path) / competition
+        # In no-docker mode, data is directly in local_path (not in a subdirectory)
+        competition_local_path = Path(local_path) if is_no_docker else Path(local_path) / competition
+
+        if not zip_competition_path.exists():
+            if is_no_docker:
+                # In no-docker mode, skip download and assume data is pre-prepared
+                logger.warning(f"No-docker mode: Skipping zip file download for {competition}. Data should be pre-prepared.")
+            else:
+                mleb_env = MLEBDockerEnv()
+                mleb_env.prepare()
+                (Path(zipfile_path)).mkdir(parents=True, exist_ok=True)
+                mleb_env.check_output(
+                    f"mlebench prepare -c {competition} --data-dir ./zip_files",
+                    local_path=local_path,
+                    running_extra_volume={str(Path("~/.kaggle").expanduser().absolute()): "/root/.kaggle"},
+                )
+
+        if not competition_local_path.exists() or list(competition_local_path.iterdir()) == []:
+            if is_no_docker:
+                # In no-docker mode, raise an error if data doesn't exist
+                raise FileNotFoundError(
+                    f"Competition data not found at {competition_local_path}. "
+                    f"In no-docker mode, data must be pre-prepared. "
+                    f"Please ensure the data is available at this path."
+                )
+            competition_local_path.mkdir(parents=True, exist_ok=True)
+
+            mleb_env = MLEBDockerEnv()
+            mleb_env.prepare()
+            mleb_env.check_output(
+                f"cp -r ./zip_files/{competition}/prepared/public/* ./{competition}", local_path=local_path
+            )

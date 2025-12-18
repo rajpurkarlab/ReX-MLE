@@ -1,0 +1,4 @@
+git+https://github.com/thesofakillers/aideml@v6.3.3
+# Anthropic SDK >= 0.35.0 required to fix httpx compatibility issue
+# Streaming support added to handle 10-minute timeout requirement
+anthropic>=0.35.0

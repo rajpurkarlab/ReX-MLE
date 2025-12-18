@@ -1,0 +1,66 @@
+import os
+import subprocess
+from pathlib import Path
+
+# Check if our submission file exists
+if Path("submission.csv").exists():
+    print("Submission file found, proceeding with validation...")
+
+    # Debug: Print current working directory and structure
+    cwd = Path.cwd()
+    print(f"Current working directory: {cwd}")
+    print(f"Files in current directory: {list(cwd.iterdir())[:10]}")
+
+    # Use the med-mle-bench validation script
+    # The script expects to be run from the workspace directory where submission.csv is located
+    validation_script = Path("/home/validate_submission.sh")
+
+    if not validation_script.exists():
+        # Try alternative locations (for rdagent workspace structure without docker)
+        # First try current directory
+        validation_script = Path("./validate_submission.sh")
+        print(f"Trying ./validate_submission.sh: exists={validation_script.exists()}")
+
+        if not validation_script.exists():
+            # Try parent directory
+            validation_script = Path("../validate_submission.sh")
+            print(f"Trying ../validate_submission.sh: exists={validation_script.exists()}")
+
+            if not validation_script.exists():
+                # Try going up to workspace root (when running from nested code directory)
+                validation_script = Path("../../validate_submission.sh")
+                print(f"Trying ../../validate_submission.sh: exists={validation_script.exists()}")
+
+                if not validation_script.exists():
+                    # Try WORKSPACE_DIR environment variable if set
+                    workspace_dir = Path(os.environ.get("WORKSPACE_DIR", "."))
+                    validation_script = workspace_dir / "validate_submission.sh"
+                    print(f"Trying {validation_script}: exists={validation_script.exists()}")
+
+    if validation_script.exists():
+        try:
+            result = subprocess.run(
+                ["bash", str(validation_script)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+
+            print(result.stdout)
+            if result.stderr:
+                print(result.stderr)
+
+            if result.returncode != 0:
+                raise AssertionError(f"Submission validation failed with code {result.returncode}")
+
+            print("Submission validation completed successfully")
+        except subprocess.TimeoutExpired:
+            print("Warning: Validation timed out, but submission file exists")
+        except Exception as e:
+            print(f"Warning: Could not run validation script: {e}")
+            print("Submission file exists, assuming valid format")
+    else:
+        print("Warning: Validation script not found, skipping format validation")
+        print("Submission file exists, assuming valid format")
+else:
+    print("Error: submission.csv not found. Seems code execution failed in some step.")

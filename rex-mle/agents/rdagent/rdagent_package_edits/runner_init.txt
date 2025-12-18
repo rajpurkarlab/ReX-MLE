@@ -1,0 +1,20 @@
+FILE: rdagent/scenarios/data_science/dev/runner/__init__.py
+
+PATCH: Add env_conda_env field to DSRunnerCoSTEERSettings
+LOCATION: Line 37 (in DSRunnerCoSTEERSettings class)
+SEARCH FOR:
+    class Config:
+        env_prefix = "DS_Runner_CoSTEER_"
+
+    max_seconds_multiplier: int = 1
+    env_type: str = "docker"
+    diff_mode: bool = False
+
+REPLACE WITH:
+    class Config:
+        env_prefix = "DS_Runner_CoSTEER_"
+
+    max_seconds_multiplier: int = 1
+    env_type: str = "docker"
+    env_conda_env: str = "rexagent"  # Conda environment name for conda mode
+    diff_mode: bool = False

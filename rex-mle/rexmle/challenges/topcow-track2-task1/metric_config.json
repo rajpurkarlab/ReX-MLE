@@ -1,0 +1,13 @@
+{
+  "metric_directions": {
+    "dice": "higher_better",
+    "cldice": "higher_better",
+    "b0_error": "lower_better",
+    "hd95": "lower_better",
+    "f1_grp2": "higher_better",
+    "anterior_graph_acc": "higher_better",
+    "posterior_graph_acc": "higher_better",
+    "anterior_topology": "higher_better",
+    "posterior_topology": "higher_better"
+  }
+}
