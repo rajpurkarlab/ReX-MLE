@@ -16,7 +16,7 @@ A medical machine learning benchmark platform for evaluating automated machine l
 
 ## Overview
 
-TrialReX-MLE provides a framework for:
+ReX-MLE provides a framework for:
 - Running multiple ML agents (RD-Agent, ML-Master, etc.) on standardized medical ML challenges
 - Preparing and managing challenge datasets
 - Evaluating agent submissions against benchmark metrics
@@ -128,7 +128,7 @@ The grading output will be saved to the specified output directory with evaluati
 ## Project Structure
 
 ```
-TrialReX-MLE/
+ReX-MLE/
 ├── setup.sh                    # Main setup script
 ├── setup/                      # Setup scripts for specific components
 │   └── setup_mlmaster.sh      # ML-Master specific setup
