@@ -163,6 +163,23 @@ See [strategies/README.md](strategies/README.md) for detailed instructions for e
 
 Each agent directory contains its own documentation for specific configuration and usage.
 
+## Citation
+
+If you use ReX-MLE in your work, please cite:
+
+```bibtex
+@article{kenia2025rexmleautonomousagentbenchmark,
+  title={ReX-MLE: The Autonomous Agent Benchmark for Medical Imaging Challenges},
+  author={Kenia, Roshan and Zhang, Xiaoman and Rajpurkar, Pranav},
+  journal={arXiv preprint arXiv:2512.17838},
+  year={2025},
+  eprint={2512.17838},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2512.17838}
+}
+```
+
 ## Notes
 
 - Ensure you have sufficient disk space for challenge data and agent outputs
