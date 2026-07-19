@@ -31,7 +31,7 @@ def convert_nuclei_geojson_to_json(geojson_path: Path, output_path: Path, class_
         geojson_path: Path to GeoJSON file with nuclei annotations
         output_path: Path to save output JSON
         class_mapping: Dict mapping full class names to simplified names
-                      e.g., {'nuclei_tumor': 'tumor', 'nuclei_lymphocytes': 'lymphocytes'}
+                      e.g., {'nuclei_tumor': 'tumor', 'nuclei_lymphocyte': 'TILs'}
 
     Output format:
     {
@@ -229,15 +229,15 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     # Track 1 has 3 classes: tumor, TILs (lymphocytes + plasma cells), other
     class_mapping_track1 = {
         'nuclei_tumor': 'tumor',
-        'nuclei_lymphocytes': 'TILs',
-        'nuclei_plasma_cells': 'TILs',  # Group with lymphocytes
-        'nuclei_histiocytes': 'other',
-        'nuclei_melanophages': 'other',
-        'nuclei_neutrophils': 'other',
-        'nuclei_stromal_cells': 'other',
+        'nuclei_lymphocyte': 'TILs',
+        'nuclei_plasma_cell': 'TILs',  # Group with lymphocytes
+        'nuclei_histiocyte': 'other',
+        'nuclei_melanophage': 'other',
+        'nuclei_neutrophil': 'other',
+        'nuclei_stroma': 'other',
         'nuclei_epithelium': 'other',
         'nuclei_endothelium': 'other',
-        'nuclei_apoptotic_cells': 'other',
+        'nuclei_apoptosis': 'other',
     }
 
     test_metadata = []

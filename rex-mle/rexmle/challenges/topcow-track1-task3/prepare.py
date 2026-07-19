@@ -221,7 +221,7 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
 ```
 train/
 ├── images/        # {len(train_cases)} CTA scans
-└── labels/        # {len(train_cases)} graph edge classification masks
+└── labels/        # {len(train_cases)} graph edge classification files (.yml)
 
 test/
 └── images/        # {len(test_cases)} test images
@@ -234,7 +234,7 @@ Classify topological edges in the Circle of Willis graph structure.
 ## File Naming
 
 - Images: `topcow_ct_{{pat_id}}_0000.nii.gz` (e.g., `topcow_ct_001_0000.nii.gz`)
-- Labels: `topcow_ct_{{pat_id}}_0000.nii.gz` (edge classification mask)
+- Labels: `topcow_ct_{{pat_id}}.yml` (edge classification labels)
 
 ## Submission Format
 
@@ -243,20 +243,19 @@ Your submission should include:
 1. **submission.csv** with columns:
    - `image_id`: Patient ID (e.g., "001")
    - `modality`: "CTA"
-   - `predicted_edges_path`: Relative path to predicted edge classification mask
+   - `predicted_edges_path`: Relative path to the predicted edge classification JSON file
 
-2. **predictions/** directory with NIfTI masks:
-   - Edge classification masks
-   - Same dimensions as input images
-   - Format: NIfTI (.nii.gz)
+2. **predictions/** directory with JSON files using this structure:
+   - `anterior`: `L-A1`, `Acom`, `3rd-A2`, and `R-A1` binary labels
+   - `posterior`: `L-Pcom`, `L-P1`, `R-P1`, and `R-Pcom` binary labels
 
 ## Example Structure:
 ```
 submission/
 ├── submission.csv
 └── predictions/
-    ├── topcow_ct_001_0000.nii.gz
-    ├── topcow_ct_002_0000.nii.gz
+    ├── topcow_ct_001_edges.json
+    ├── topcow_ct_002_edges.json
     └── ...
 ```
 

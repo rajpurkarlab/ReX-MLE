@@ -179,7 +179,7 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     # Create sample submission
     sample_sub = test_df[['image_id', 'modality']].copy()
     sample_sub['predicted_mask_path'] = sample_sub['image_id'].apply(
-        lambda x: f"predictions/topcow_ct_{x}_0000.nii.gz"
+        lambda x: f"predictions/topcow_ct_{x}.nii.gz"
     )
     sample_sub.to_csv(public / "sample_submission.csv", index=False)
 
@@ -232,7 +232,7 @@ Segment individual brain vessels into 40 anatomical classes with topology-aware 
 ## File Naming
 
 - Images: `topcow_ct_{{pat_id}}_0000.nii.gz` (e.g., `topcow_ct_001_0000.nii.gz`)
-- Labels: `topcow_ct_{{pat_id}}_0000.nii.gz` (multiclass segmentation with 40 vessel labels)
+- Labels: `topcow_ct_{{pat_id}}.nii.gz` (multiclass segmentation with 40 vessel labels)
 
 ## Submission Format
 
@@ -253,8 +253,8 @@ Your submission should include:
 submission/
 ├── submission.csv
 └── predictions/
-    ├── topcow_ct_001_0000.nii.gz
-    ├── topcow_ct_002_0000.nii.gz
+    ├── topcow_ct_001.nii.gz
+    ├── topcow_ct_002.nii.gz
     └── ...
 ```
 

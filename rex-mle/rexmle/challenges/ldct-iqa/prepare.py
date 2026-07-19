@@ -54,6 +54,8 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     5. Create sample_submission.csv in public/
     """
 
+    private.mkdir(parents=True, exist_ok=True)
+
     # Download if needed
     if not raw.exists() or not list(raw.glob('*')):
         download_data(raw)

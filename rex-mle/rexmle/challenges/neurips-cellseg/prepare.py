@@ -162,6 +162,8 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     tuning_labels_dir = tuning_dir / "labels" if (tuning_dir / "labels").exists() else tuning_dir
 
     tuning_pairs = find_image_label_pairs(tuning_images_dir, tuning_labels_dir)
+    for pair in tuning_pairs:
+        pair['image_id'] = f"tuning_{pair['image_id']}"
     print(f"Found {len(tuning_pairs)} tuning image-label pairs")
 
     # Combine all labeled data for train/test split
@@ -174,6 +176,10 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
 
     # Sort by image_id to ensure consistent ordering across systems
     all_pairs = sorted(all_pairs, key=lambda x: x['image_id'])
+
+    image_ids = [pair['image_id'] for pair in all_pairs]
+    if len(image_ids) != len(set(image_ids)):
+        raise ValueError("Duplicate image IDs found after source-specific naming")
 
     # Split train/test (80/20) with fixed random_state for reproducibility
     # All users will get the exact same split
@@ -195,23 +201,28 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     # Copy training data (with labels)
     print("\nCopying training data...")
     for pair in train_pairs_split:
-        shutil.copy(pair['image_path'], public / "train" / "images" / pair['image_path'].name)
-        shutil.copy(pair['label_path'], public / "train" / "labels" / pair['label_path'].name)
+        image_filename = f"{pair['image_id']}{pair['image_path'].suffix}"
+        label_filename = f"{pair['image_id']}{pair['label_path'].suffix}"
+        shutil.copy(pair['image_path'], public / "train" / "images" / image_filename)
+        shutil.copy(pair['label_path'], public / "train" / "labels" / label_filename)
 
     # Copy test data
     print("Copying test data...")
     test_metadata = []
     for pair in test_pairs_split:
+        image_filename = f"{pair['image_id']}{pair['image_path'].suffix}"
+        label_filename = f"{pair['image_id']}{pair['label_path'].suffix}"
+
         # Copy image to public (without label)
-        shutil.copy(pair['image_path'], public / "test" / "images" / pair['image_path'].name)
+        shutil.copy(pair['image_path'], public / "test" / "images" / image_filename)
 
         # Copy label to private
-        shutil.copy(pair['label_path'], private / "test" / "labels" / pair['label_path'].name)
+        shutil.copy(pair['label_path'], private / "test" / "labels" / label_filename)
 
         test_metadata.append({
             'image_id': pair['image_id'],
-            'image_path': f"test/images/{pair['image_path'].name}",
-            'label_path': f"test/labels/{pair['label_path'].name}"
+            'image_path': f"test/images/{image_filename}",
+            'label_path': f"test/labels/{label_filename}"
         })
 
     # Save test labels CSV

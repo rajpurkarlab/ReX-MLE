@@ -31,7 +31,7 @@ def convert_nuclei_geojson_to_json(geojson_path: Path, output_path: Path, class_
         geojson_path: Path to GeoJSON file with nuclei annotations
         output_path: Path to save output JSON
         class_mapping: Dict mapping full class names to simplified names
-                      e.g., {'nuclei_tumor': 'tumor', 'nuclei_lymphocytes': 'lymphocytes'}
+                      e.g., {'nuclei_tumor': 'tumor', 'nuclei_lymphocyte': 'lymphocytes'}
 
     Output format:
     {
@@ -229,15 +229,15 @@ def prepare(raw: Path, public: Path, private: Path) -> None:
     # Track 2 has 10 classes (granular classification, no grouping)
     class_mapping_track2 = {
         'nuclei_tumor': 'tumor',
-        'nuclei_lymphocytes': 'lymphocytes',
-        'nuclei_plasma_cells': 'plasma_cells',
-        'nuclei_histiocytes': 'histiocytes',
-        'nuclei_melanophages': 'melanophages',
-        'nuclei_neutrophils': 'neutrophils',
-        'nuclei_stromal_cells': 'stromal_cells',
+        'nuclei_lymphocyte': 'lymphocytes',
+        'nuclei_plasma_cell': 'plasma_cells',
+        'nuclei_histiocyte': 'histiocytes',
+        'nuclei_melanophage': 'melanophages',
+        'nuclei_neutrophil': 'neutrophils',
+        'nuclei_stroma': 'stromal_cells',
         'nuclei_epithelium': 'epithelium',
         'nuclei_endothelium': 'endothelium',
-        'nuclei_apoptotic_cells': 'apoptotic_cells',
+        'nuclei_apoptosis': 'apoptotic_cells',
     }
 
     test_metadata = []

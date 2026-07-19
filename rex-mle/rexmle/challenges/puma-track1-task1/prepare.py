@@ -49,14 +49,12 @@ def convert_geojson_to_mask(geojson_path: Path, output_path: Path, image_shape: 
 
     # Class name to ID mapping
     class_mapping = {
-        'stroma': 1,
-        'blood vessel': 2,
-        'tumor': 3,
-        'epidermis': 4,
-        'necrosis': 5,
-        # Alternative names
-        'blood_vessel': 2,
-        'stromal': 1,
+        'tissue_white_background': 0,
+        'tissue_stroma': 1,
+        'tissue_blood_vessel': 2,
+        'tissue_tumor': 3,
+        'tissue_epidermis': 4,
+        'tissue_necrosis': 5,
     }
 
     # Process each feature
@@ -71,9 +69,9 @@ def convert_geojson_to_mask(geojson_path: Path, output_path: Path, image_shape: 
             class_name = properties.get('name', '').lower()
 
         # Get class ID
-        class_id = class_mapping.get(class_name, 0)
-        if class_id == 0:
+        if class_name not in class_mapping:
             continue  # Skip unknown classes
+        class_id = class_mapping[class_name]
 
         # Get coordinates
         if geometry.get('type') == 'Polygon':
